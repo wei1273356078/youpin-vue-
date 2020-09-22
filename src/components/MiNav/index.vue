@@ -3,7 +3,7 @@
 		<li><router-link to='/' exact><i></i><span>首页</span></router-link></li>
 		<li><router-link to='/category' class="active"><i></i><span>分类</span></router-link></li>
 		<li><router-link to='/taste'><i></i><span>品味</span></router-link></li>
-		<li><router-link to='/cart'><i></i><span>购物车</span><b>0</b></router-link></li>
+		<li><router-link to='/cart'><i></i><span>购物车</span><b v-text="total">0</b></router-link></li>
 		<li><router-link to='/profile'><i></i><span>个人</span></router-link></li>
 	</ul>
 </template>
@@ -11,6 +11,11 @@
 <script type="text/ecmascript-6">
         export default {
                 name: 'mi-nav',
+	        props: {
+                        total: {
+                                type: Number,
+                        }
+	        }
         };
 </script>
 

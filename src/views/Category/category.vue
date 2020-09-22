@@ -33,7 +33,7 @@
 				</div>
 			</div>
 			<div class="page-footer">
-				<miNav></miNav>
+				<miNav :total="total"></miNav>
 			</div>
 		</div>
 </template>
@@ -51,6 +51,7 @@
                                 listMain: [], // 一级分类数据
                                 listSub: [],  // 二级分类数据
                                 activeId: 0,  // 当前激活的一级分类的id值
+	                        total: 0
                         };
                 },
                 computed: {
@@ -80,6 +81,16 @@
                                         this.listMain = data;
                                         this.toggleId(data[0].id);
                                 })
+                        if(!this.$cookies.get('token')) {
+                                this.total = 0;
+                                return;
+                        }else {
+                                this.$axios({
+                                        methd: 'get',
+                                        url: '/cart/total'
+                                })
+                                        .then(total => this.total = total);
+                        }
                 }
         };
 </script>

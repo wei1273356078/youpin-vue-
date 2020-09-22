@@ -28,7 +28,7 @@ var router = new VueRouter({
                         },
                 },
                 {
-                        path: '/detail',
+                        path: '/detail/:pid',
                         component: views.Detail
                 },
                 {
@@ -76,8 +76,8 @@ var router = new VueRouter({
                         },
                 },
                 {
-                        path: 'my_order',
-                        compononet: views.MyOrder,
+                        path: '/my_order',
+                        component: views.MyOrder,
                         meta: {
                                 requireAuth: true
                         },

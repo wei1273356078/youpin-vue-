@@ -11,9 +11,9 @@ import Cart from './Cart/cart.vue';
 import LoginPwd from './Login/loginPwd.vue';
 import  LoginPhone from './Login/loginPhone.vue';
 import  Address from './address/address.vue';
-import OrderConfirm from './order_confirm';
-import Pay from './pay';
-import MyOrder from './my_order';
+import OrderConfirm from './order_confirm/index.vue';
+import Pay from './pay/index.vue';
+import MyOrder from './my_order/index.vue';
 
 export default {
         Home,
@@ -29,5 +29,5 @@ export default {
         Address,
         OrderConfirm,
         Pay,
-        MyOrder
+        MyOrder,
 };

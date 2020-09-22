@@ -1,7 +1,7 @@
 <template>
 	<div>
 		这是 taske 组件
-		<miNav></miNav>
+		<miNav :total="total"></miNav>
 	</div>
 </template>
 
@@ -13,6 +13,23 @@
 		components: {
 	                miNav
 		},
+		data() {
+	                return {
+	                        total: 0
+	                }
+		},
+		created() {
+                        if(!this.$cookies.get('token')) {
+                                this.total = 0;
+                                return;
+                        }else {
+                                this.$axios({
+                                        methd: 'get',
+                                        url: '/cart/total'
+                                })
+                                        .then(total => this.total = total);
+                        }
+		}
 	};
 </script>
 

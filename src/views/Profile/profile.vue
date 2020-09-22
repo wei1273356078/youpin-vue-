@@ -2,7 +2,7 @@
 		<div class="profile-container">
 			<div class="page-header">
 				<!-- 未登录 -->
-				<div class="empty">
+				<div class="empty" v-show="!isLogin" @click="login">
 					<div class="avatar-wrap">
 						<img src="/images/profile/avatar.png" />
 						<span>请登录</span>
@@ -10,14 +10,14 @@
 					<i class="iconfont icon-arrow-right"></i>
 				</div>
 				<!-- 登录 -->
-				<div class="login">
+				<div class="login" v-show="isLogin">
 					<img src="/images/profile/avatar.png" />
-					<span class="user"></span>
+					<span class="user" v-text="$cookies.get('userName')"></span>
 				</div>
 			</div>
 			<div class="page-content">
 				<div class="content-top">
-					<div class="order">
+					<div class="order" @click="$router.push('/my_order')">
 						<span>我的订单</span>
 						<i class="iconfont icon-arrow-right"></i>
 					</div>
@@ -60,7 +60,7 @@
 							<i class="iconfont icon-arrow-right"></i>
 						</div>
 					</div>
-					<div class="address">
+					<div class="address" @click="$router.push('/address')">
 						<div>
 							<img src="/images/profile/icon_address.png" />
 							<span>地址管理</span>
@@ -93,10 +93,10 @@
 						<div><i class="iconfont icon-arrow-right"></i></div>
 					</div>
 				</div>
-				<span class="exit">退出</span>
+				<span class="exit" v-show="isLogin" @click="exitUser">退出</span>
 			</div>
 			<div class="page-footer">
-				<miNav></miNav>
+				<miNav :total="total"></miNav>
 			</div>
 		</div>
 </template>
@@ -109,9 +109,39 @@
 		components: {
 	                miNav
 		},
+                data() {
+                        return {
+                                isLogin: false,
+	                        total: 0
+                        }
+                },
+		methods: {
+	                exitUser() {
+	                        this.$cookies.remove('token');
+	                        this.isLogin = false;
+	                },
+			login() {
+	                        this.$router.push({
+		                        path: '/login',
+		                        query: {
+		                                back: this.$route.path
+		                        }
+	                        })
+			},
+		},
 		created() {
-	                setInterval()
-		}
+                        this.$cookies.get('token') ? this.isLogin = true : this.isLogin = false;
+                        if(!this.$cookies.get('token')) {
+                                this.total = 0;
+                                return;
+                        }else {
+                                this.$axios({
+                                        methd: 'get',
+                                        url: '/cart/total'
+                                })
+                                        .then(total => this.total = total);
+                        }
+		},
 	};
 </script>
 
@@ -137,11 +167,8 @@
 		background-repeat: no-repeat;
 	}
 	/* 未登录 */
-	.page-header>.empty.show {
-		display: flex;
-	}
 	.page-header>.empty {
-		display: none;
+		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
@@ -168,11 +195,8 @@
 
 
 	/* 登录 */
-	.page-header>.login.show {
-		display: flex;
-	}
 	.page-header>.login {
-		display: none;
+		display: flex;
 		align-items: center;
 	}
 	.page-header>.login>img {
@@ -193,13 +217,10 @@
 		margin-top: 5px;
 	}
 	/* 退出登录 */
-	.page-content>span.exit.show {
-		display: block;
-	}
 	.page-content>span.exit {
 		margin: 0 auto;
 		font-size: 14px;
-		display: none;
+		display: block;
 		height: 45px;
 		width: 100px;
 		line-height: 45px;
